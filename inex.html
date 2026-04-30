@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroStat - TP INF 232</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .stats-card { border-left: 5px solid #198754; }
+    </style>
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark bg-success mb-4">
+        <div class="container">
+            <span class="navbar-brand mb-0 h1">🚜 AgroStat - Collecte & Analyse</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Collecte de Données</h5>
+                    </div>
+                    <div class="card-body">
+                        <form action="/collecte" method="POST">
+                            <div class="mb-3">
+                                <label class="form-label">Type de Culture</label>
+                                <select name="culture" class="form-select">
+                                    <option value="Maïs">Maïs</option>
+                                    <option value="Manioc">Manioc</option>
+                                    <option value="Cacao">Cacao</option>
+                                    <option value="Café">Café</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Prix au Kg (FCFA)</label>
+                                <input type="number" name="prix" class="form-control" step="0.1" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Humidité du sol (%)</label>
+                                <input type="range" name="humidite" class="form-range" min="0" max="100">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Zone / Localité</label>
+                                <input type="text" name="zone" class="form-control" placeholder="Ex: Centre, Ouest..." required>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">Enregistrer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="row mb-4">
+                    <div class="col-sm-6">
+                        <div class="card p-3 shadow-sm stats-card">
+                            <small class="text-muted">Total des collectes</small>
+                            <h3 class="mb-0">{{ stats.total }}</h3>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card p-3 shadow-sm stats-card">
+                            <small class="text-muted">Prix Moyen (FCFA)</small>
+                            <h3 class="mb-0">{{ stats.prix_moyen }}</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Historique des données</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Culture</th>
+                                        <th>Prix</th>
+                                        <th>Humidité</th>
+                                        <th>Zone</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in data %}
+                                    <tr>
+                                        <td><strong>{{ row.culture }}</strong></td>
+                                        <td>{{ row.prix }}</td>
+                                        <td>{{ row.humidite }}%</td>
+                                        <td>{{ row.zone }}</td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted p-4">Aucune donnée collectée pour le moment.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center mt-5 mb-3 text-muted">
+        <small>Projet INF 232 EC2 - Système de Collecte AgroTech</small>
+    </footer>
+
+</body>
+</html>
